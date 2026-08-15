@@ -1,0 +1,32 @@
+name: Documentation
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check required bilingual documents
+        run: |
+          test -s README.md
+          test -s README.en.md
+          test -s ROADMAP.md
+          test -s ROADMAP.en.md
+          test -s docs/architecture.zh-CN.md
+          test -s docs/architecture.en.md
+          test -s docs/deployments.zh-CN.md
+          test -s docs/deployments.en.md
+          test -s docs/workflows.zh-CN.md
+          test -s docs/workflows.en.md
+          test -s docs/astrbot.zh-CN.md
+          test -s docs/astrbot.en.md
+          test -s docs/operations.zh-CN.md
+          test -s docs/operations.en.md
+      - name: Check whitespace
+        run: git diff --check HEAD^ HEAD || test "$(git rev-list --count HEAD)" = 1

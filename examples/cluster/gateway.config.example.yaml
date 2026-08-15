@@ -1,0 +1,38 @@
+version: 1
+listen:
+  host: 0.0.0.0
+  port: 19189
+
+database_path: /data/gateway.sqlite
+output_directory: /data/outputs
+
+workers:
+  - id: primary
+    url: http://primary-worker.example:8188
+    expected_device_name: "COPY_THE_EXACT_SYSTEM_STATS_DEVICE_NAME"
+    seconds_per_image: 30
+    capabilities: [default]
+    required: true
+    primary: true
+    enabled: true
+  - id: gpu-worker-1
+    url: http://gpu-worker-1.example:8188
+    expected_device_name: "COPY_THE_EXACT_SYSTEM_STATS_DEVICE_NAME"
+    seconds_per_image: 20
+    capabilities: [default]
+    required: false
+    primary: false
+    enabled: true
+
+batching:
+  enabled: false
+  merge_window_ms: 20
+  adapters:
+    sdxl-euler-normal: true
+    anima-euler-sgm: true
+    anima-er-sde: true
+  workers:
+    primary:
+      default: 2
+    gpu-worker-1:
+      default: 2
